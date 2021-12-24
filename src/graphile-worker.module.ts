@@ -1,7 +1,7 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
 import { EventEmitter } from 'events';
-import { RunnerOptions } from 'graphile-worker';
+import { RunnerOptions, Logger } from 'graphile-worker';
 import {
   GraphileWorkerAsyncConfiguration,
   GraphileWorkerConfiguration,
@@ -11,7 +11,7 @@ import { ListenerExplorerService } from './services/listener-explorer.service';
 import { MetadataAccessorService } from './services/metadata-accessor.service';
 import { TaskExplorerService } from './services/task-explorer.service';
 import { WorkerService } from './services/worker.service';
-import { RunnerLogger } from './utils/graphile-worker-logger.utils';
+import { graphileWorkerLogFactory } from './utils/graphile-worker-logger.utils';
 
 export const GRAPHILE_WORKER_TOKEN = Symbol.for('NestJsGraphileWorker');
 
@@ -109,11 +109,12 @@ export class GraphileWorkerModule {
 function buildRunnerOptions(
   configuration: GraphileWorkerConfiguration,
 ): RunnerOptions {
+  const logger = new Logger(graphileWorkerLogFactory);
   const events = new EventEmitter();
 
   return {
     ...configuration,
-    logger: RunnerLogger,
+    logger,
     events,
   };
 }

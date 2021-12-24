@@ -1,12 +1,7 @@
-import {
-  LogFunction,
-  Logger as GraphileLogger,
-  LogLevel,
-  LogMeta,
-} from '@graphile/logger';
+import { LogFunction, LogLevel, LogMeta } from '@graphile/logger';
 import { Logger } from '@nestjs/common';
 
-function graphileWorkerLogFactory(_scope): LogFunction {
+export function graphileWorkerLogFactory(_scope): LogFunction {
   const logger = new Logger('GraphileWorker');
 
   return (level: LogLevel, message: string, meta?: LogMeta) => {
@@ -30,5 +25,3 @@ function graphileWorkerLogFactory(_scope): LogFunction {
     }
   };
 }
-
-export const RunnerLogger = new GraphileLogger(graphileWorkerLogFactory);
